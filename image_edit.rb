@@ -35,9 +35,7 @@ class Image < Array
   
   def fill(r, c, old_color, new_color)    
     return if (r < 0 || c < 0 || r > self.rows-1 || c > self.columns-1)
-    
     return if self.content[r][c] != old_color
-  
     self.content[r][c] = new_color if self.content[r][c] == old_color
     
     fill(r, c+1, old_color, new_color)
@@ -101,7 +99,7 @@ loop do
         puts "A horizontal line of color #{param4} has been drawn in row #{param3.to_i} between column #{param1.to_i} and #{param2.to_i}."
       when "F"
         @pic.colorize_region(param1.to_i, param2.to_i, param3)
-        puts "A region of the image has been fill flooded with color #{param3}."
+        puts "A region of the image has been 4-way fill flooded with color #{param3}."
       when "S"
         puts "The image currently looks as below:\n"
         puts @pic.show
