@@ -1,46 +1,44 @@
-class Image
+class Image < Array
+  attr_accessor :rows, :columns, :content
+  
   def initialize(rows, columns)
-    @rows = rows
-    @columns = columns
-    
-    create_image(rows, columns)
+    @rows, @columns = rows, columns
+    create_image(self.rows, self.columns)
   end
   
   def create_image(rows, columns)
-    @image = Array.new(rows) { Array.new(columns, "O") }
+    @content = Array.new(rows) { Array.new(columns, "O") }
   end
   
   def reset
-    create_image(@rows, @columns)
+    create_image(self.rows, self.columns)
   end
   
   def colorize_pixel(row, column, new_color)
-    @image[row-1][column-1] = new_color
+    self.content[row-1][column-1] = new_color
   end
   
   def draw_vertical(column, row_start, row_end, new_color)
-    (row_start-1..row_end-1).each { |row| @image[row][column-1] = new_color }
+    (row_start-1..row_end-1).each { |row| self.content[row][column-1] = new_color }
   end
   
   def draw_horizontal(column_start, column_end, row, new_color)
-    (column_start-1..column_end-1).each { |column| @image[row-1][column] = new_color }
+    (column_start-1..column_end-1).each { |column| self.content[row-1][column] = new_color }
   end
   
   def colorize_region(row, column, new_color)
-    r = row-1
-    c = column-1
-    
-    old_color = @image[r][c]
+    r, c = row-1, column-1    
+    old_color = self.content[r][c]
 
     fill(r, c, old_color, new_color)
   end
   
   def fill(r, c, old_color, new_color)    
-    return if (r < 0 || c < 0 || r > @image.length-1 || c > @image[0].length-1)
+    return if (r < 0 || c < 0 || r > self.rows-1 || c > self.columns-1)
     
-    return if @image[r][c] != old_color
+    return if self.content[r][c] != old_color
   
-    @image[r][c] = new_color if @image[r][c] == old_color
+    self.content[r][c] = new_color if self.content[r][c] == old_color
     
     fill(r, c+1, old_color, new_color)
     fill(r, c-1, old_color, new_color)
@@ -49,19 +47,16 @@ class Image
   end
   
   def show
-    @img = String.new
+    img = String.new
     
-    @image.each do |row|
-      row.each { |pixel_colour| @img += pixel_colour }
-      @img += "\n"
+    self.content.each do |row|
+      row.each { |pixel_colour| img += pixel_colour }
+      img += "\n"
     end
     
-    @img
+    img
   end
 end
-
-
-
 
 
 puts "\nCOMMANDS:"
@@ -94,7 +89,7 @@ loop do
         puts "Could not create image as it already exists."
       when "C"
         @pic.reset
-        puts "The image has been set to pure white!"
+        puts "The image has been reset to pure white!"
       when "L"
         @pic.colorize_pixel(param1.to_i, param2.to_i, param3)
         puts "The pixel on row #{param1.to_i} : column #{param2.to_i} has been colored in colour #{param3}."
@@ -119,7 +114,7 @@ loop do
         unless param1.nil? && param2.nil?
           if param1.to_i >= 1 && param1.to_i <= 250 && param2.to_i >= 1 && param2.to_i <= 250 then
             @pic = Image.new(param1.to_i, param2.to_i)
-            puts "Created #{param1.to_i}x#{param2.to_i} pixels white image."
+            puts "Created #{@pic.rows}x#{@pic.columns} pixels white image."
           else
             puts "Image dimensions must be positive integers and image size cannot be above 250x250 pixels."
           end
