@@ -1,4 +1,4 @@
-class Image < Array
+class Image
   attr_accessor :rows, :columns, :content
   
   def initialize(rows, columns)
@@ -28,20 +28,20 @@ class Image < Array
   
   def colorize_region(row, column, new_color)
     r, c = row-1, column-1    
-    old_color = self.content[r][c]
+    old_color = self.content[r][c] #get original pixel color
 
-    fill(r, c, old_color, new_color)
+    fill(r, c, old_color, new_color) #recursive 4-way flood fill
   end
   
   def fill(r, c, old_color, new_color)    
-    return if (r < 0 || c < 0 || r > self.rows-1 || c > self.columns-1)
-    return if self.content[r][c] != old_color
-    self.content[r][c] = new_color if self.content[r][c] == old_color
+    return if (r < 0 || c < 0 || r > self.rows-1 || c > self.columns-1) #stop when reaching the image border
+    return if self.content[r][c] != old_color #leave differently colored pixels alone
+    self.content[r][c] = new_color if self.content[r][c] == old_color #fill color
     
-    fill(r, c+1, old_color, new_color)
-    fill(r, c-1, old_color, new_color)
-    fill(r+1, c, old_color, new_color)
-    fill(r-1, c, old_color, new_color)
+    fill(r, c+1, old_color, new_color) #go east
+    fill(r, c-1, old_color, new_color) #go west
+    fill(r+1, c, old_color, new_color) #go south
+    fill(r-1, c, old_color, new_color) #go north
   end
   
   def show

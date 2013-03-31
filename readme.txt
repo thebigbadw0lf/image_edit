@@ -1,5 +1,3 @@
-Technical Test
-
 Graphical editors allow users to edit images in the same way text editors let us modify documents. Images are represented as an M x N array of pixels with each pixel given colour.
 
 Produce a program that simulates a simple interactive graphical editor.
